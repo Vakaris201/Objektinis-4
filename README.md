@@ -30,14 +30,20 @@ VEIKIMAS
 
 Programa atidaro `tekstas.md` ir skaito failą eilutė po eilutės.
 Kiekvienoje eilutėje:
-	- Pirmiausia randami URL'ai.
-	- Išgauti URL'ai pašalinami.
-	- Eilutė valoma nuo Markdown konstrukcijų su `stripMarkdown`.
-    - Tada eilutė skaidoma į žodžius. Kiekvienas žodis apdorojamas su `punctuation()` (šalinami brūkšniai ir specialūs simboliai) ir ASCII raidės mažinamos su `toLower()`.
-    - Programa skaičiuoja kiek kartų žodis pasikartoja ir išsaugo eilutės numerius, kuriuose žodis pasirodė.
+
+
+Pirmiausia randami URL'ai.
+Išgauti URL'ai pašalinami.
+Eilutė valoma nuo Markdown konstrukcijų su `stripMarkdown`.
+Tada eilutė skaidoma į žodžius. Kiekvienas žodis apdorojamas su `punctuation()` (šalinami brūkšniai ir specialūs simboliai) ir ASCII raidės mažinamos su `toLower()`.
+Programa skaičiuoja kiek kartų žodis pasikartoja ir išsaugo eilutės numerius, kuriuose žodis pasirodė.
+
+
 Išvedama:
-	- Pasikartojantys žodžiai su kiekiais ir eilutėmis į `zodziai.txt`.
-	- Visi rasti URL'ai jų aptikimo tvarka į `url.txt`.
+
+
+Pasikartojantys žodžiai su kiekiais ir eilutėmis į `zodziai.txt`.
+Visi rasti URL'ai jų aptikimo tvarka į `url.txt`.
 
 
 
