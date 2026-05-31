@@ -101,6 +101,8 @@ void print_u(std::ofstream& fout,
         fout << nr++ << ". [eilutė " << line_num << "] " << url << std::endl;
 }
 
+// When building tests that include this translation unit, define TESTING_MODE
+#ifndef TESTING_MODE
 int main() {
     std::ifstream fin(input);
     std::map<std::string, int> wordcount;
@@ -174,3 +176,4 @@ int main() {
     std::cout << "URL is viso: " << url_vector.size() << std::endl;
     return 0;
 }
+#endif // TESTING_MODE
