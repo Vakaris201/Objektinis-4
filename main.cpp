@@ -43,11 +43,27 @@ std::string stripMarkdown(const std::string& line) {
 
 std::string punctuation(const std::string& word) {
     std::string result;
-    bool letter = false;
-    for(unsigned char c : word) {
+    int i = 0, len = (int)word.size();
+    while(i < len) {
+        unsigned char c = word[i];
+        if(c == 0xE2 && i + 2 < len && (unsigned char)word[i+1] == 0x88 &&
+           (unsigned char)word[i+2] == 0x92) {
+            i += 3; continue;
+        }
+        if(c == 0xE2 && i + 2 < len &&
+           (unsigned char)word[i+1] == 0x80 &&
+           ((unsigned char)word[i+2] == 0x92 ||
+            (unsigned char)word[i+2] == 0x93 ||
+            (unsigned char)word[i+2] == 0x94)) {
+            i += 3;
+            continue;
+        }
         if(c > 127 || std::isalpha(c))
             result += c;
+        i++;
     }
+    
+    
     return result;
 }
 
@@ -93,7 +109,7 @@ int main() {
 
     std::vector<std::pair<int,std::string>> url_vector;
 
-    std::regex urlPattern(R"(https?://[^\s\]\,"\'<>]+)");
+    std::regex urlPattern(R"(https?://[^\s\[\]\,"\'<>\xC2]+)");
 
     std::string line;
     int line_num = 0;
@@ -103,17 +119,25 @@ int main() {
         auto it = std::sregex_iterator(line.begin(), line.end(), urlPattern);
         for(; it != std::sregex_iterator(); ++it) {
             std::string url = it->str();
-            while(!url.empty() && (url.back() == '.' || url.back() == ','))
-                url.pop_back();
-            while(!url.empty() && url.back() == ')') {
-                int open = 0, close = 0;
-                for(char c : url) {
-                    if(c == '(') open++;
-                    else if(c == ')') close++;
+            const std::string skrb = ".,:;!?";
+            while(!url.empty()) {
+                unsigned char c = url.back();
+                if(skrb.find((char)c) != std::string::npos) {
+                    url.pop_back();
+                    continue;
                 }
-                if(close <= open)
-                    break;
-                url.pop_back();
+                if(c == ')') {
+                    int open = 0, close = 0;
+                    for(char ch : url) {
+                        if(ch == '(') open++;
+                        else if(ch == ')') close++;
+                    }
+                    if(close > open) {
+                        url.pop_back(); 
+                        continue; 
+                    }
+                }
+                break;
             }
             url_vector.push_back({line_num, url});
         }
